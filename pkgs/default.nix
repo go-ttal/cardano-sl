@@ -4371,12 +4371,15 @@ inherit (pkgs.xorg) libXrender;};
            license = stdenv.lib.licenses.bsd3;
          }) {};
       "async" = callPackage
-        ({ mkDerivation, base, stdenv, stm }:
+        ({ mkDerivation, base, hashable, stdenv, stm }:
          mkDerivation {
            pname = "async";
-           version = "2.1.1.1";
-           sha256 = "cd83e471466ea6885b2e8fb60f452db3ac3fdf3ea2d6370aa1e071ebc37544e2";
-           libraryHaskellDepends = [ base stm ];
+           version = "2.2.1";
+           sha256 = "8f0b86022a1319d3c1c68655790da4b7f98017982e27ec3f3dbfe01029d39027";
+           isLibrary = true;
+           isExecutable = true;
+           libraryHaskellDepends = [ base hashable stm ];
+           executableHaskellDepends = [ base stm ];
            doHaddock = false;
            doCheck = false;
            homepage = "https://github.com/simonmar/async";
@@ -6928,13 +6931,14 @@ inherit (pkgs) mesa;};
          , cardano-sl-db, cardano-sl-delegation, cardano-sl-infra
          , cardano-sl-lrc, cardano-sl-networking, cardano-sl-ssc
          , cardano-sl-txp, cardano-sl-update, cardano-sl-util, cborg, cereal
-         , conduit, constraints, containers, cpphs, cryptonite, data-default
-         , directory, ed25519, ekg-core, ether, exceptions, extra, filelock
-         , filepath, fmt, formatting, generic-arbitrary, half, hashable
-         , hspec, lens, log-warper, mmorph, monad-control, MonadRandom, mtl
-         , neat-interpolation, optparse-applicative, parsec
-         , plutus-prototype, pvss, QuickCheck, random, reflection, resourcet
-         , safe-exceptions, safecopy, serokell-util, servant, servant-client
+         , conduit, constraints, containers, contravariant, cpphs
+         , cryptonite, data-default, directory, ed25519, ekg-core, ether
+         , exceptions, extra, filelock, filepath, fmt, formatting
+         , generic-arbitrary, half, hashable, hspec, lens, log-warper
+         , mmorph, monad-control, MonadRandom, mtl, neat-interpolation
+         , network-transport, optparse-applicative, parsec, plutus-prototype
+         , pvss, QuickCheck, random, reflection, resourcet, safe-exceptions
+         , safecopy, serokell-util, servant, servant-client
          , servant-client-core, servant-server, servant-swagger, stdenv, stm
          , systemd, tagged, template-haskell, text, text-format, time
          , time-units, transformers, transformers-base, transformers-lift
@@ -6952,16 +6956,16 @@ inherit (pkgs) mesa;};
              cardano-sl-delegation cardano-sl-infra cardano-sl-lrc
              cardano-sl-networking cardano-sl-ssc cardano-sl-txp
              cardano-sl-update cardano-sl-util cborg cereal conduit constraints
-             containers cpphs cryptonite data-default directory ed25519 ekg-core
-             ether exceptions filelock filepath formatting generic-arbitrary
-             hashable hspec lens log-warper mmorph monad-control mtl
-             neat-interpolation optparse-applicative parsec plutus-prototype
-             pvss QuickCheck random reflection resourcet safe-exceptions
-             safecopy serokell-util servant servant-client servant-client-core
-             servant-server servant-swagger stm systemd tagged template-haskell
-             text text-format time time-units transformers transformers-base
-             transformers-lift universum unix unliftio unordered-containers wai
-             warp warp-tls yaml
+             containers contravariant cpphs cryptonite data-default directory
+             ed25519 ekg-core ether exceptions filelock filepath formatting
+             generic-arbitrary hashable hspec lens log-warper mmorph
+             monad-control mtl neat-interpolation network-transport
+             optparse-applicative parsec plutus-prototype pvss QuickCheck random
+             reflection resourcet safe-exceptions safecopy serokell-util servant
+             servant-client servant-client-core servant-server servant-swagger
+             stm systemd tagged template-haskell text text-format time
+             time-units transformers transformers-base transformers-lift
+             universum unix unliftio unordered-containers wai warp warp-tls yaml
            ];
            testHaskellDepends = [
              base bytestring canonical-json cardano-crypto cardano-sl-binary
@@ -7413,10 +7417,11 @@ inherit (pkgs) mesa;};
              transformers-lift universum unliftio-core
            ];
            executableHaskellDepends = [
-             attoparsec base binary bytestring conduit conduit-extra containers
-             exceptions formatting lens log-warper MonadRandom mtl
-             network-transport-tcp optparse-simple random resourcet
-             safe-exceptions serokell-util text text-format time-units
+             async attoparsec base binary bytestring cardano-sl-util conduit
+             conduit-extra containers exceptions formatting lens log-warper
+             MonadRandom mtl network-transport network-transport-tcp
+             optparse-simple random resourcet safe-exceptions serokell-util text
+             text-format time-units
            ];
            testHaskellDepends = [
              base binary bytestring containers hspec lens log-warper mtl
@@ -7427,7 +7432,7 @@ inherit (pkgs) mesa;};
            license = stdenv.lib.licenses.mit;
          }) {};
       "cardano-sl-node" = callPackage
-         ({ mkDerivation, base, cardano-sl, cardano-sl-infra
+        ({ mkDerivation, base, cardano-sl, cardano-sl-infra
          , cardano-sl-networking, cardano-sl-ssc, cardano-sl-update
          , cardano-sl-util, cpphs, log-warper, stdenv, universum
          }:
